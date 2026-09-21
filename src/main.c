@@ -9,6 +9,8 @@ main()
     while(should_run()) {
         begin_drawing();
         clear_screen(0xF000);
+        fill_rect(10, 10, 100, 100, 0xFF00);
+        draw_rect(10, 10, 100, 100, 0x0000);
         end_drawing();
     }
     deinit_graphics();

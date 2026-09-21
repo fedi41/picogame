@@ -21,15 +21,27 @@ begin_drawing()
 }
 
 void
-end_drawing()
-{
-    EndDrawing();
-}
-
-void
 clear_screen(color_t color)
 {
     ClearBackground(RGB565_TO_COLOR(color));
+}
+
+void
+draw_rect(int x, int y, int w, int h, color_t color)
+{
+    DrawRectangleLines(w, y, w, h, RGB565_TO_COLOR(color));
+}
+
+void
+fill_rect(int x, int y, int w, int h, color_t color)
+{
+    DrawRectangle(x, y, w, h, RGB565_TO_COLOR(color));
+}
+
+void
+end_drawing()
+{
+    EndDrawing();
 }
 
 void
