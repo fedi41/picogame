@@ -39,6 +39,34 @@ fill_rect(int x, int y, int w, int h, color_t color)
 }
 
 void
+draw_circle(int cx, int cy, int r, color_t color)
+{
+    DrawCircleLines(cx, cy, r, RGB565_TO_COLOR(color));
+}
+
+void
+fill_circle(int cx, int cy, int r, color_t color)
+{
+    DrawCircle(cx, cy, r, RGB565_TO_COLOR(color));
+}
+
+void
+draw_triangle(int x1, int y1, int x2, int y2, int x3, int y3, color_t color) {
+    DrawTriangleLines((Vector2){ x1, y1 },
+                      (Vector2){ x2, y2 },
+                      (Vector2){ x3, y3 }, RGB565_TO_COLOR(color));
+}
+
+void
+fill_triangle(int x1, int y1, int x2, int y2, int x3, int y3, color_t color) {
+    DrawTriangle((Vector2){ x1, y1 },
+                 (Vector2){ x2, y2 },
+                 (Vector2){ x3, y3 }, RGB565_TO_COLOR(color));
+}
+
+
+
+void
 end_drawing()
 {
     EndDrawing();
