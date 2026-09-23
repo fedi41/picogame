@@ -1,7 +1,6 @@
 #ifndef GRAPHICS_H
 #define GRAPHICS_H
 
-#include <raylib.h>
 #include <stdint.h>
 
 typedef uint16_t color_t;
