@@ -5,7 +5,7 @@
 int
 init_system()
 {
-    //stdio_init_all();
+    stdio_init_all();
     gpio_init(25);
     gpio_set_dir(25, GPIO_OUT);
     gpio_put(25, 1);
