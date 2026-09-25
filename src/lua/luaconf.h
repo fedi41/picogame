@@ -68,7 +68,7 @@
 ** use 'readline'.
 */
 #if defined(LUA_USE_LINUX)
-#define LUA_USE_POSIX
+/* #define LUA_USE_POSIX */
 /* #define LUA_USE_DLOPEN		 needs an extra library: -ldl */
 #if !defined(LUA_READLINELIB)
 #define LUA_READLINELIB		"libreadline.so"
