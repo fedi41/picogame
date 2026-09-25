@@ -1,5 +1,8 @@
 #include <raylib.h>
+#include <stdio.h>
 #include "../graphics.h"
+
+#define INFO "INFO: "
 
 #define RGB565_TO_COLOR(c) (Color){ \
     .r = (unsigned char)((((uint16_t)(c) >> 11) & 0x1F) * 255 / 31), \
@@ -11,6 +14,7 @@
 int
 init_graphics()
 {
+    puts(INFO "Init graphics");
     return 0;
 }
 
@@ -75,5 +79,6 @@ end_drawing()
 void
 deinit_graphics()
 {
+    puts(INFO "Deinit graphics");
     return;
 }

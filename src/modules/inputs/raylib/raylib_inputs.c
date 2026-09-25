@@ -1,9 +1,13 @@
 #include "../inputs.h"
 #include <raylib.h>
+#include <stdio.h>
+
+#define INFO "INFO: "
 
 int
 init_inputs()
 {
+    puts(INFO "Init inputs");
     return 0;
 }
 
@@ -44,6 +48,7 @@ is_btn_down(int btn)
 int
 deinit_inputs()
 {
+    puts(INFO "Deinit inputs");
     return 0;
 }
 
