@@ -1,6 +1,8 @@
 #ifndef FILES_H
 #define FILES_H
 
+#include <stddef.h>
+
 int init_files();
 int file_open(const char *pathname);
 size_t file_read(void *ptr, size_t size, size_t nb_elements, int fd); 
