@@ -17,8 +17,15 @@ main()
     init_inputs();
     init_files();
 
+    //init_inputs();
+    int x = 10;
+    int y = 10;
+    //int speed = 5;
     while(should_run()) {
         begin_drawing();
+        clear_screen(0xFFFF);
+        fill_circle(x, y, 5, 0xFFFF);
+        fill_triangle(x+10, y+10, x+30, y+10, x+25, y-15, 0xD0DA);
         end_drawing();
     }
 

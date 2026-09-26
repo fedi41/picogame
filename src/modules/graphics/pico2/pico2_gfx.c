@@ -23,7 +23,7 @@ begin_drawing()
 void
 clear_screen(color_t color)
 {
-    puts(INFO "Clear the screen");
+    LCD_1IN3_Clear(color);
 }
 
 void
