@@ -23,7 +23,8 @@ main()
     //int speed = 5;
     while(should_run()) {
         begin_drawing();
-        clear_screen(0xFFFF);
+        clear_screen(0x00FF);
+        fill_rect(100, 100, 130, 130, 0xFF00);
         fill_circle(x, y, 5, 0xFFFF);
         fill_triangle(x+10, y+10, x+30, y+10, x+25, y-15, 0xD0DA);
         end_drawing();
