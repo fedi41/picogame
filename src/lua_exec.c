@@ -3,6 +3,8 @@
 #include "lua/lua.h"
 #include "lua/lauxlib.h"
 #include "lua/lualib.h"
+#include "lua_modules/lua_gfx.h"
+#include "lua_modules/lua_inputs.h"
 #include "modules/files/files.h"
 #include "modules/graphics/graphics.h"
 #include "hal/hal.h"
@@ -22,55 +24,6 @@ static const char
     return stream->buffer;
 }
 
-static int
-lua_begin_drawing(lua_State *L)
-{
-    begin_drawing();
-    return 0;
-}
-
-static int
-lua_end_drawing(lua_State *L)
-{
-    end_drawing();
-    return 0;
-}
-
-static int
-lua_fill_rect(lua_State *L)
-{
-    int x = (int)luaL_checkinteger(L, 1);
-    int y = (int)luaL_checkinteger(L, 2);
-    int w = (int)luaL_checkinteger(L, 3);
-    int h = (int)luaL_checkinteger(L, 4);
-    uint16_t color = (int)luaL_checkinteger(L, 5);
-    fill_rect(x, y, w, h, color);
-    return 0;
-}
-
-static int
-lua_clear_screen(lua_State *L)
-{
-    uint16_t color = luaL_checkinteger(L, 1);
-    clear_screen(color);
-    return 0;
-}
-
-static const struct luaL_Reg graphics_lib[] = {
-    {"begin_drawing", lua_begin_drawing},
-    {"end_drawing", lua_end_drawing},
-    {"fill_rect",    lua_fill_rect},
-    {"clear_screen", lua_clear_screen},
-    {NULL, NULL}  
-};
-
-int
-luaopen_graphics(lua_State *L)
-{
-    luaL_newlib(L, graphics_lib);
-    return 1;
-}
-
 void
 open_libs(lua_State *L)
 {
@@ -81,6 +34,8 @@ open_libs(lua_State *L)
     luaL_requiref(L, "string", luaopen_string, 1);
     lua_pop(L, 1);
     luaL_requiref(L, "gfx", luaopen_graphics, 1);
+    lua_pop(L, 1);
+    luaL_requiref(L, "input", luaopen_inputs, 1);
     lua_pop(L, 1);
 }
 
