@@ -1,6 +1,7 @@
 #include "../graphics.h"
 #include <stdio.h>
 #include "pico/stdlib.h"
+#include "LCD_1in3.h"
 
 #define INFO "INFO: "
 
@@ -9,7 +10,7 @@ typedef uint16_t color_t;
 int
 init_graphics()
 {
-    puts(INFO "Init graphics");
+    LCD_1IN3_Init(HORIZONTAL);
     return 0;
 }
 
@@ -46,7 +47,8 @@ draw_circle(int cx, int cy, int r, color_t color)
 void
 fill_circle(int cx, int cy, int r, color_t color)
 {
-    puts(INFO "Fill a circle");
+    LCD_1IN3_DisplayPoint(cx, cy, color);
+    puts("Fill a circle");
 }
 
 void
