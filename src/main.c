@@ -17,13 +17,28 @@ main()
     init_inputs();
     init_files();
 
-    lua_run("test.lua");
+    lua_State *L = lua_compile("test.lua");
+    if (!L) {
+        printf("Quit");
+        return 69;
+    }
+    if (lua_init_engine(L) == 69) {
+        return 69;
+    }
 
     while(should_run()) {
+        if (lua_update_engine(L) == 69) {
+            break;
+        }
+
         begin_drawing();
-        clear_screen(0x0000);
+
+        lua_draw_engine(L);
+
         end_drawing();
     }
+
+    lua_close(L);
 
     deinit_files();
     deinit_inputs();

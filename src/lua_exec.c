@@ -1,8 +1,11 @@
+#include <stdint.h>
 #include "lua_exec.h"
 #include "lua/lua.h"
 #include "lua/lauxlib.h"
 #include "lua/lualib.h"
 #include "modules/files/files.h"
+#include "modules/graphics/graphics.h"
+#include "hal/hal.h"
 
 #define ERROR "ERROR: "
 
@@ -19,6 +22,55 @@ static const char
     return stream->buffer;
 }
 
+static int
+lua_begin_drawing(lua_State *L)
+{
+    begin_drawing();
+    return 0;
+}
+
+static int
+lua_end_drawing(lua_State *L)
+{
+    end_drawing();
+    return 0;
+}
+
+static int
+lua_fill_rect(lua_State *L)
+{
+    int x = (int)luaL_checkinteger(L, 1);
+    int y = (int)luaL_checkinteger(L, 2);
+    int w = (int)luaL_checkinteger(L, 3);
+    int h = (int)luaL_checkinteger(L, 4);
+    uint16_t color = (int)luaL_checkinteger(L, 5);
+    fill_rect(x, y, w, h, color);
+    return 0;
+}
+
+static int
+lua_clear_screen(lua_State *L)
+{
+    uint16_t color = luaL_checkinteger(L, 1);
+    clear_screen(color);
+    return 0;
+}
+
+static const struct luaL_Reg graphics_lib[] = {
+    {"begin_drawing", lua_begin_drawing},
+    {"end_drawing", lua_end_drawing},
+    {"fill_rect",    lua_fill_rect},
+    {"clear_screen", lua_clear_screen},
+    {NULL, NULL}  
+};
+
+int
+luaopen_graphics(lua_State *L)
+{
+    luaL_newlib(L, graphics_lib);
+    return 1;
+}
+
 void
 open_libs(lua_State *L)
 {
@@ -28,10 +80,12 @@ open_libs(lua_State *L)
     lua_pop(L, 1);
     luaL_requiref(L, "string", luaopen_string, 1);
     lua_pop(L, 1);
+    luaL_requiref(L, "gfx", luaopen_graphics, 1);
+    lua_pop(L, 1);
 }
 
-int
-lua_run(const char *pathname)
+lua_State
+*lua_compile(const char *pathname)
 {
     int fd = file_open(pathname);
     LuaStream stream = {
@@ -39,7 +93,7 @@ lua_run(const char *pathname)
     };
     lua_State *L = luaL_newstate();
     if (!L) {
-        return 69;
+        return NULL;
     }
 
     open_libs(L);
@@ -50,16 +104,73 @@ lua_run(const char *pathname)
     if (status != LUA_OK) {
         const char *err = lua_tostring(L, -1);
         printf(ERROR "Lua: %s\n", err);
-        lua_close(L);
-        return 69;
+        return NULL;
     }
-    // Execute the bytecode
-    status = lua_pcall(L, 0, 0, 0);
-    if (status != LUA_OK) {
+
+    //lua_close(L);
+    return L;
+}
+
+int
+lua_init_engine(lua_State *L)
+{
+    // First we need to execute the bytecode entirely
+    if (lua_pcall(L, 0, 0, 0) != LUA_OK) {
         const char *err = lua_tostring(L, -1);
         printf(ERROR "Lua: %s\n", err);
-        lua_close(L);
+        lua_pop(L, 1);
         return 69;
+    } 
+    // Execute the init() function 
+    lua_getglobal(L, "init");
+    if (lua_isfunction(L, -1)) {
+        int status = lua_pcall(L, 0, 0, 0);
+        if (status != LUA_OK) {
+            const char *err = lua_tostring(L, -1);
+            printf(ERROR "Lua: %s\n", err);
+            lua_pop(L, 1);
+            return 69;
+        }
+    } else {
+        lua_pop(L, 1);
     }
-    lua_close(L);
+    return 0;
+}
+
+int
+lua_update_engine(lua_State *L)
+{
+    // Execute the update() function
+    lua_getglobal(L, "update");
+    if (lua_isfunction(L, -1)) {
+        int status = lua_pcall(L, 0, 0, 0);
+        if (status != LUA_OK) {
+            const char *err = lua_tostring(L, -1);
+            printf(ERROR "Lua: %s\n", err);
+            lua_pop(L, 1);
+            return 69;
+        }
+    } else {
+        lua_pop(L, 1);
+    }
+    return 0;
+}
+
+int
+lua_draw_engine(lua_State *L)
+{
+    // Execute the draw() function
+    lua_getglobal(L, "draw");
+    if (lua_isfunction(L, -1)) {
+        int status = lua_pcall(L, 0, 0, 0);
+        if (status != LUA_OK) {
+            const char *err = lua_tostring(L, -1);
+            printf(ERROR "Lua: %s\n", err);
+            lua_pop(L, 1);
+            return 69;
+        }
+    } else {
+        lua_pop(L, 1);
+    }
+    return 0;
 }
