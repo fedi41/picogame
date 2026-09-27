@@ -493,8 +493,7 @@ void Paint_DrawCircle(UWORD X_Center, UWORD Y_Center, UWORD Radius,
     { // Draw a hollow circle
         while (XCurrent <= YCurrent)
         {
-            Paint_DrawPoint(X_Center + XCurrent, Y_Center + YCurrent, Color, Line_width, DOT_STYLE_DFT); // 1
-            Paint_DrawPoint(X_Center - XCurrent, Y_Center + YCurrent, Color, Line_width, DOT_STYLE_DFT); // 2
+            Paint_DrawPoint(X_Center + XCurrent, Y_Center + YCurrent, Color, Line_width, DOT_STYLE_DFT); // 1 Paint_DrawPoint(X_Center - XCurrent, Y_Center + YCurrent, Color, Line_width, DOT_STYLE_DFT); // 2
             Paint_DrawPoint(X_Center - YCurrent, Y_Center + XCurrent, Color, Line_width, DOT_STYLE_DFT); // 3
             Paint_DrawPoint(X_Center - YCurrent, Y_Center - XCurrent, Color, Line_width, DOT_STYLE_DFT); // 4
             Paint_DrawPoint(X_Center - XCurrent, Y_Center - YCurrent, Color, Line_width, DOT_STYLE_DFT); // 5
@@ -510,6 +509,115 @@ void Paint_DrawCircle(UWORD X_Center, UWORD Y_Center, UWORD Radius,
                 YCurrent--;
             }
             XCurrent++;
+        }
+    }
+}
+
+/******************************************************************************
+function: Draw a triangle
+parameter:
+    X1, Y1       : First point coordinates
+    X2, Y2       : Second point coordinates
+    X3, Y3       : Third point coordinates
+    Color        : The color of the triangle
+    Line_width   : Line width
+    Draw_Fill    : Whether to fill the inside of the triangle
+******************************************************************************/
+void Paint_DrawTriangle(UWORD X1, UWORD Y1,
+                        UWORD X2, UWORD Y2,
+                        UWORD X3, UWORD Y3,
+                        UWORD Color, DOT_PIXEL Line_width,
+                        DRAW_FILL Draw_Fill)
+{
+    if (X1 > Paint.Width || Y1 > Paint.Height ||
+        X2 > Paint.Width || Y2 > Paint.Height ||
+        X3 > Paint.Width || Y3 > Paint.Height)
+    {
+        return;
+    }
+
+    // Draw outline
+    Paint_DrawLine(X1, Y1, X2, Y2,
+                   Color, Line_width, LINE_STYLE_SOLID);
+
+    Paint_DrawLine(X2, Y2, X3, Y3,
+                   Color, Line_width, LINE_STYLE_SOLID);
+
+    Paint_DrawLine(X3, Y3, X1, Y1,
+                   Color, Line_width, LINE_STYLE_SOLID);
+
+    if (!Draw_Fill)
+    {
+        return;
+    }
+
+    // Find bounding box
+    int minY = Y1;
+    int maxY = Y1;
+
+    if (Y2 < minY) minY = Y2;
+    if (Y3 < minY) minY = Y3;
+
+    if (Y2 > maxY) maxY = Y2;
+    if (Y3 > maxY) maxY = Y3;
+
+    // Scanline fill
+    for (int y = minY; y <= maxY; y++)
+    {
+        int intersections[2];
+        int count = 0;
+
+        // Edge 1 -> 2
+        if ((Y1 <= y && y < Y2) ||
+            (Y2 <= y && y < Y1))
+        {
+            intersections[count++] =
+                (int)X1 +
+                ((int)X2 - (int)X1) * (y - (int)Y1) /
+                ((int)Y2 - (int)Y1);
+        }
+
+        // Edge 2 -> 3
+        if ((Y2 <= y && y < Y3) ||
+            (Y3 <= y && y < Y2))
+        {
+            intersections[count++] =
+                (int)X2 +
+                ((int)X3 - (int)X2) * (y - (int)Y2) /
+                ((int)Y3 - (int)Y2);
+        }
+
+        // Edge 3 -> 1
+        if ((Y3 <= y && y < Y1) ||
+            (Y1 <= y && y < Y3))
+        {
+            intersections[count++] =
+                (int)X3 +
+                ((int)X1 - (int)X3) * (y - (int)Y3) /
+                ((int)Y1 - (int)Y3);
+        }
+
+        if (count == 2)
+        {
+            int startX = intersections[0];
+            int endX   = intersections[1];
+
+            if (startX > endX)
+            {
+                int temp = startX;
+                startX = endX;
+                endX = temp;
+            }
+
+            Paint_DrawLine(
+                (UWORD)startX,
+                (UWORD)y,
+                (UWORD)endX,
+                (UWORD)y,
+                Color,
+                Line_width,
+                LINE_STYLE_SOLID
+            );
         }
     }
 }

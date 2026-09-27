@@ -25,8 +25,8 @@ main()
         begin_drawing();
         clear_screen(0x00FF);
         fill_rect(100, 100, 130, 130, 0xFF00);
-        fill_circle(x, y, 5, 0xFFFF);
-        fill_triangle(x+10, y+10, x+30, y+10, x+25, y-15, 0xD0DA);
+        fill_circle(x, y, 20, 0xFFFF);
+        fill_triangle(100, 30, 130, 100, 125, 15, 0x0000);
         end_drawing();
     }
 

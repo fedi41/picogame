@@ -62,28 +62,28 @@ fill_rect(int x, int y, int w, int h, color_t color)
 void
 draw_circle(int cx, int cy, int r, color_t color)
 {
-    // TODO: make it draw a circle
+    Paint_DrawCircle(cx, cy, r, color, DOT_PIXEL_1X1, DRAW_FILL_EMPTY);
     puts(INFO "Draw a circle");
 }
 
 void
 fill_circle(int cx, int cy, int r, color_t color)
 {
-    //LCD_1IN3_DisplayPoint(cx, cy, color);
+    Paint_DrawCircle(cx, cy, r, color, DOT_PIXEL_1X1, DRAW_FILL_FULL);
     puts(INFO "Fill a circle");
 }
 
 void
 draw_triangle(int x1, int y1, int x2, int y2, int x3, int y3, color_t color)
 {
-    // TODO: make it draw a triangle
+    Paint_DrawTriangle(x1, y1, x2, y2, x3, y3, color, DOT_PIXEL_1X1, DRAW_FILL_EMPTY);
     puts(INFO "Draw a triangle");
 }
 
 void
 fill_triangle(int x1, int y1, int x2, int y2, int x3, int y3, color_t color)
 {
-    // TODO: make it fill a triangle
+    Paint_DrawTriangle(x1, y1, x2, y2, x3, y3, color, DOT_PIXEL_1X1, DRAW_FILL_FULL);
     puts(INFO "Fill a triangle");
 }
 
@@ -98,4 +98,7 @@ void
 deinit_graphics()
 {
     puts(INFO "Deinit the graphics");
+    free(BlackImage);
+    BlackImage = NULL;
+    DEV_Module_Exit();
 }
