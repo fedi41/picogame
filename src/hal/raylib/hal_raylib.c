@@ -5,7 +5,7 @@
 int
 init_system()
 {
-    InitWindow(320, 240, "PicoGame");
+    InitWindow(240, 240, "PicoGame");
     SetTargetFPS(60);
     return 0;
 }
