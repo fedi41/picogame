@@ -69,6 +69,17 @@ fill_triangle(int x1, int y1, int x2, int y2, int x3, int y3, color_t color) {
 }
 
 
+void
+draw_text(const char *text, int x, int y, int size, color_t color)
+{
+    DrawText(text, x, y, size, RGB565_TO_COLOR(color));
+}
+
+int
+get_width_text(const char *text, int size)
+{
+    return MeasureText(text, size);
+}
 
 void
 end_drawing()

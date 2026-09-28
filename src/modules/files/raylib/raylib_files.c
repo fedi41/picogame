@@ -1,4 +1,7 @@
 #include <stdio.h>
+#include <raylib.h>
+#include <string.h>
+#include <stdlib.h>
 #include "../files.h"
 
 #define MAX_FILES 40 
@@ -57,6 +60,53 @@ file_close(int fd)
         fclose(fd_table[fd]);
     }
     fd_table[fd] = NULL;
+}
+
+dirlist_t 
+lsdir(const char *path)
+{
+    dirlist_t list = { NULL, 0 };
+
+    FilePathList raylib_list = LoadDirectoryFiles(path);
+    if (raylib_list.count > 0 && raylib_list.paths != NULL) {
+        list.count = raylib_list.count;
+        list.paths = malloc(list.count * sizeof(char *));
+
+        
+        for (unsigned int i = 0; i < list.count; i++) {
+            const char *path = raylib_list.paths[i];
+            const char *last_slash = strrchr(path, '/');
+            const char *last_antislash = strrchr(path, '\\');
+
+            const char *name = last_slash;
+            if (last_antislash > name) {
+                name = last_antislash;
+            }
+
+            if (name != NULL) {
+                name++; 
+            } else {
+                name = path;
+            }
+
+            list.paths[i] = strdup(name);
+        }
+    }
+    UnloadDirectoryFiles(raylib_list);
+    return list;
+}
+
+void
+free_dirlist(dirlist_t *list)
+{
+    if (list->paths) {
+        for (unsigned int i = 0; i < list->count; i++) {
+            free(list->paths[i]);
+        }
+        free(list->paths);
+        list->paths = NULL;
+    }
+    list->count = 0;
 }
 
 int

@@ -15,6 +15,8 @@ void draw_circle(int cx, int cy, int r, color_t color);
 void fill_circle(int cx, int cy, int r, color_t color);
 void draw_triangle(int x1, int y1, int x2, int y2, int x3, int y3, color_t color);
 void fill_triangle(int x1, int y1, int x2, int y2, int x3, int y3, color_t color);
+void draw_text(const char *text, int x, int y, int size, color_t color);
+int get_width_text(const char *text, int size);
 
 void end_drawing();
 void deinit_graphics();
