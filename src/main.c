@@ -24,7 +24,7 @@ main()
 
     while(should_run()) {
         begin_drawing();
-        draw_text("Picogame! (or PicoGame?)", 10, 10, 16, 0xEEEE);
+        draw_text("Picogame! (or PicoGame?)", 10, 10, 18, 0xEEEE);
         end_drawing();
     }
 
