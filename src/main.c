@@ -16,6 +16,11 @@ main()
     init_graphics();
     init_inputs();
     init_files();
+    dirlist_t list = lsdir("src/");
+
+    for (unsigned int i = 0; i < list.count; i++) {
+        printf("Files : %s\n", list.paths[i]);
+    }
 
     //init_inputs();
     int x = 10;
@@ -23,12 +28,11 @@ main()
     //int speed = 5;
     while(should_run()) {
         begin_drawing();
-        clear_screen(0x00FF);
-        fill_rect(100, 100, 130, 130, 0xFF00);
-        fill_circle(x, y, 20, 0xFFFF);
-        fill_triangle(100, 30, 130, 100, 125, 15, 0x0000);
+        draw_text("Picogame! (or PicoGame?)", 10, 10, 18, 0xEEEE);
         end_drawing();
     }
+
+    free_dirlist(&list);
 
     deinit_files();
     deinit_inputs();
