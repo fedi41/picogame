@@ -16,7 +16,7 @@ int
 init_files()
 {
     index_table = 0;
-    memset(fd_table, NULL, MAX_FILES);
+    memset(fd_table, 0, MAX_FILES);
     return 0;
 }
 

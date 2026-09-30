@@ -1,6 +1,10 @@
 #include <raylib.h>
 #include "../hal.h"
 
+#if defined(PLATFORM_WEB)
+#include <emscripten/emscripten.h>
+#endif
+
 
 int
 init_system()

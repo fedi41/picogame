@@ -1,5 +1,5 @@
-#ifndef GRAPHICS_H
-#define GRAPHICS_H
+#ifndef TEXT_H
+#define TEXT_H
 
 #include <stdint.h>
 

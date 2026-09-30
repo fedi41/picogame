@@ -18,19 +18,18 @@ main()
     init_inputs();
     init_text();
     init_files();
+    init_inputs();
     dirlist_t list = lsdir("src/");
 
     for (unsigned int i = 0; i < list.count; i++) {
         printf("Files : %s\n", list.paths[i]);
     }
 
-    //init_inputs();
-    int x = 10;
-    int y = 10;
+    //int x = 10;
+    //int y = 10;
     //int speed = 5;
     while(should_run()) {
         begin_drawing();
-        //draw_text("Picogame! (or PicoGame?)", 10, 10, 18, 0xEEEE);
         draw_string("Test", 20, 20, 1, 0xF800);
         draw_string("Picogame", 160, 160, 3, 0xFF00);
         draw_char('A', 200, 200, 6, 0xf9f9);
