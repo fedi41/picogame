@@ -5,7 +5,8 @@
 
 typedef uint16_t color_t;
 
-void draw_char(int x, int y, const char ascii, color_t color, int scale);
-void draw_string(int x, int y, const char *text, color_t color, int scale);
+void init_text();
+void draw_char(const char ascii, int x, int y, int scale, color_t color);
+void draw_string(const char *text, int x, int y, int scale, color_t color);
 
 #endif

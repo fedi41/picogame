@@ -3,6 +3,7 @@
 #include "modules/graphics/graphics.h"
 #include "modules/inputs/inputs.h"
 #include "modules/files/files.h"
+#include "modules/text/text.h"
 #include "lua_exec.h"
 
 #include "lua/lua.h"
@@ -15,6 +16,7 @@ main()
     init_system();
     init_graphics();
     init_inputs();
+    init_text();
     init_files();
     dirlist_t list = lsdir("src/");
 
@@ -28,7 +30,10 @@ main()
     //int speed = 5;
     while(should_run()) {
         begin_drawing();
-        draw_text("Picogame! (or PicoGame?)", 10, 10, 18, 0xEEEE);
+        //draw_text("Picogame! (or PicoGame?)", 10, 10, 18, 0xEEEE);
+        draw_string("Test", 20, 20, 1, 0xF800);
+        draw_string("Picogame", 160, 160, 3, 0xFF00);
+        draw_char('A', 200, 200, 6, 0xf9f9);
         end_drawing();
     }
 
