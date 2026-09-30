@@ -2,6 +2,10 @@
 #include <stdio.h>
 #include "../graphics.h"
 
+#if defined(PLATFORM_WEB)
+#include <emscripten/emscripten.h>
+#endif
+
 #define INFO "INFO: "
 #define SCALE 2
 
@@ -86,6 +90,9 @@ void
 end_drawing()
 {
     EndDrawing();
+#if defined(PLATFORM_WEB)
+    emscripten_sleep(16);
+#endif
 }
 
 void
