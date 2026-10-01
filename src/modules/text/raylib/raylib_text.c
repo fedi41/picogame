@@ -47,8 +47,8 @@ init_text()
 void
 draw_char(const char ascii, int x, int y, int scale, color_t color)
 {
-    int cw = ft.Width;  
-    int ch = ft.Height; 
+    int cw = ft.Width;
+    int ch = ft.Height;
 
     unsigned char uc = (unsigned char)ascii;
 
@@ -67,7 +67,7 @@ draw_char(const char ascii, int x, int y, int scale, color_t color)
     };
 
     Vector2 origin = { 0.0f, 0.0f };
-    
+
     DrawTexturePro(fontTexture, srcRec, destRec, origin, 0.0f, RGB565_TO_COLOR(color));
 }
 
@@ -97,6 +97,6 @@ draw_string(const char *text, int x, int y, int scale, color_t color)
         Vector2 origin = { 0.0f, 0.0f };
         DrawTexturePro(fontTexture, srcRec, destRec, origin, 0.0f, RGB565_TO_COLOR(color));
 
-        x += cw * scale * SCALE;
+        x += cw * scale;
     }
 }
