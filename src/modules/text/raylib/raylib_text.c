@@ -4,6 +4,10 @@
 #include <string.h>
 #include "../fonts/fonts.h"
 
+#if defined(PLATFORM_WEB)
+#include <emscripten/emscripten.h>
+#endif
+
 #define SCALE 2
 
 #define RGB565_TO_COLOR(c) (Color){ \
