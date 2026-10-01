@@ -622,6 +622,8 @@ void Paint_DrawTriangle(UWORD X1, UWORD Y1,
     }
 }
 
+
+
 void Paint_DrawImage1(const unsigned char *image, UWORD xStart, UWORD yStart, UWORD W_Image, UWORD H_Image)
 {
     int i, j;

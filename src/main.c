@@ -10,6 +10,8 @@
 #include "lua/lauxlib.h"
 #include "lua/lualib.h"
 
+#define TEST_GRID_SIZE 10   
+
 int
 main()
 {
@@ -17,27 +19,39 @@ main()
     init_graphics();
     init_inputs();
     init_text();
-    init_files();
-    dirlist_t list = lsdir("src/");
+    //init_files();
+    //dirlist_t list = lsdir("src/");
 
-    for (unsigned int i = 0; i < list.count; i++) {
-        printf("Files : %s\n", list.paths[i]);
-    }
+    //for (unsigned int i = 0; i < list.count; i++) {
+    //    printf("Files : %s\n", list.paths[i]);
+    //}
 
     //init_inputs();
-    int x = 10;
-    int y = 10;
-    //int speed = 5;
     while(should_run()) {
         begin_drawing();
+
+        for (int x = 0; x < 240/TEST_GRID_SIZE+TEST_GRID_SIZE; x++) 
+        {
+            for (int y = 0; y < 240/TEST_GRID_SIZE+TEST_GRID_SIZE; y++)
+            {
+                if ((x+y)%2==0)
+                {
+                    fill_rect(x*TEST_GRID_SIZE, y*TEST_GRID_SIZE, TEST_GRID_SIZE, TEST_GRID_SIZE, 0x0000);
+                } else {
+                    fill_rect(x*TEST_GRID_SIZE, y*TEST_GRID_SIZE, TEST_GRID_SIZE, TEST_GRID_SIZE, 0x1111);
+                }
+            }
+        }
+
+
         //draw_text("Picogame! (or PicoGame?)", 10, 10, 18, 0xEEEE);
         draw_string("Test", 20, 20, 1, 0xF800);
-        draw_string("Picogame", 160, 160, 3, 0xFF00);
+        draw_string("Picogame", 100, 160, 3, 0xFF00);
         draw_char('A', 200, 200, 6, 0xf9f9);
         end_drawing();
     }
 
-    free_dirlist(&list);
+    //free_dirlist(&list);
 
     deinit_files();
     deinit_inputs();
