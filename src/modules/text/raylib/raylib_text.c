@@ -60,8 +60,8 @@ draw_char(const char ascii, int x, int y, int scale, color_t color)
     };
 
     Rectangle destRec = {
-        (float)x,
-        (float)y,
+        (float)x * SCALE,
+        (float)y * SCALE,
         (float)(cw * scale * SCALE),
         (float)(ch * scale * SCALE)
     };
@@ -88,8 +88,8 @@ draw_string(const char *text, int x, int y, int scale, color_t color)
         };
 
         Rectangle destRec = {
-            (float)x,
-            (float)y,
+            (float)x * SCALE,
+            (float)y * SCALE,
             (float)(cw * scale * SCALE),
             (float)(ch * scale * SCALE)
         };
