@@ -45,8 +45,8 @@ main()
 
 
         //draw_text("Picogame! (or PicoGame?)", 10, 10, 18, 0xEEEE);
-        draw_string("Test", 20, 20, 1, 0xF800);
-        draw_string("Picogame", 100, 160, 3, 0xFF00);
+        draw_string_centered_x("Test", 120, 20, 1, 0xF800);
+        draw_string_centered_xy("Picogame", 120, 120, 3, 0xFF00);
         draw_char('A', 200, 200, 6, 0xf9f9);
         end_drawing();
     }

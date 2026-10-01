@@ -1,6 +1,7 @@
 #include "../text.h"
 #include <raylib.h>
 #include <stdint.h>
+#include <string.h>
 #include "../fonts/fonts.h"
 
 #define SCALE 2
@@ -99,4 +100,18 @@ draw_string(const char *text, int x, int y, int scale, color_t color)
 
         x += cw * scale;
     }
+}
+
+size_t
+width_string(const char *text, int scale) {
+    return strlen(text) * scale * ft.Width ;
+}
+void
+draw_string_centered_x(const char *text, int x, int y, int scale, color_t color) {
+    draw_string(text, x - width_string(text, scale)/2, y, scale, color);
+}
+
+void
+draw_string_centered_xy(const char *text, int x, int y, int scale, color_t color) {
+    draw_string(text, x - width_string(text, scale)/2, y - ft.Height/2*scale, scale, color);
 }

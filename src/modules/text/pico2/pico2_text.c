@@ -1,6 +1,7 @@
 #include "../text.h"
 #include "../fonts/fonts.h"
 #include <stdint.h>
+#include <string.h>
 #include "modules/graphics/pico2-lcd1in3/GUI_Paint.h"
 
 FONT *font = &Font6x8;
@@ -69,4 +70,18 @@ draw_string(const char *text, int x, int y, int scale, color_t color)
 
         x += font->Width*scale;
     }
+}
+
+size_t
+width_string(const char *text, int scale) {
+    return strlen(text) * scale * font->Width;
+}
+void
+draw_string_centered_x(const char *text, int x, int y, int scale, color_t color) {
+    draw_string(text, x - width_string(text, scale)/2, y, scale, color);
+}
+
+void
+draw_string_centered_xy(const char *text, int x, int y, int scale, color_t color) {
+    draw_string(text, x - width_string(text, scale)/2, y - font->Height/2*scale, scale, color);
 }
