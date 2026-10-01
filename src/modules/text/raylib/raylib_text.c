@@ -1,6 +1,7 @@
 #include "../text.h"
 #include <raylib.h>
 #include <stdint.h>
+#include <string.h>
 #include "../fonts/fonts.h"
 
 #if defined(PLATFORM_WEB)
@@ -51,8 +52,8 @@ init_text()
 void
 draw_char(const char ascii, int x, int y, int scale, color_t color)
 {
-    int cw = ft.Width;  
-    int ch = ft.Height; 
+    int cw = ft.Width;
+    int ch = ft.Height;
 
     unsigned char uc = (unsigned char)ascii;
 
@@ -64,14 +65,14 @@ draw_char(const char ascii, int x, int y, int scale, color_t color)
     };
 
     Rectangle destRec = {
-        (float)x,
-        (float)y,
+        (float)x * SCALE,
+        (float)y * SCALE,
         (float)(cw * scale * SCALE),
         (float)(ch * scale * SCALE)
     };
 
     Vector2 origin = { 0.0f, 0.0f };
-    
+
     DrawTexturePro(fontTexture, srcRec, destRec, origin, 0.0f, RGB565_TO_COLOR(color));
 }
 
@@ -92,8 +93,8 @@ draw_string(const char *text, int x, int y, int scale, color_t color)
         };
 
         Rectangle destRec = {
-            (float)x,
-            (float)y,
+            (float)x * SCALE,
+            (float)y * SCALE,
             (float)(cw * scale * SCALE),
             (float)(ch * scale * SCALE)
         };
@@ -101,6 +102,20 @@ draw_string(const char *text, int x, int y, int scale, color_t color)
         Vector2 origin = { 0.0f, 0.0f };
         DrawTexturePro(fontTexture, srcRec, destRec, origin, 0.0f, RGB565_TO_COLOR(color));
 
-        x += cw * scale * SCALE;
+        x += cw * scale;
     }
+}
+
+size_t
+width_string(const char *text, int scale) {
+    return strlen(text) * scale * ft.Width ;
+}
+void
+draw_string_centered_x(const char *text, int x, int y, int scale, color_t color) {
+    draw_string(text, x - width_string(text, scale)/2, y, scale, color);
+}
+
+void
+draw_string_centered_xy(const char *text, int x, int y, int scale, color_t color) {
+    draw_string(text, x - width_string(text, scale)/2, y - ft.Height/2*scale, scale, color);
 }

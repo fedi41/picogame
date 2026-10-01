@@ -35,6 +35,7 @@ void
 begin_drawing()
 {
     puts(INFO "Begin drawing");
+    Paint_Clear(BLACK);
     // no further work required here
 }
 
@@ -55,7 +56,7 @@ draw_rect(int x, int y, int w, int h, color_t color)
 void
 fill_rect(int x, int y, int w, int h, color_t color)
 {
-    Paint_DrawRectangle(x, y, w, h, color,DOT_PIXEL_1X1, DRAW_FILL_FULL);
+    Paint_DrawRectangle(x, y, x+w, y+h, color, DOT_PIXEL_1X1, DRAW_FILL_FULL);
     puts(INFO "Fill a rectangle");
 }
 
