@@ -2,12 +2,7 @@
 #include <stdint.h>
 
 
-
-//struct {
-//    int index;
-//    const char *categories;
-//} categories_menu_state;
-
+void update_categories_menu();
 
 void draw_menu_bg();
 void draw_categories_menu();

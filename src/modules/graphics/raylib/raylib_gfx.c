@@ -86,13 +86,14 @@ get_width_text(const char *text, int size)
     return MeasureText(text, size*SCALE);
 }
 
-void
+float
 end_drawing()
 {
     EndDrawing();
 #if defined(PLATFORM_WEB)
     emscripten_sleep(16);
 #endif
+    return GetFrameTime();
 }
 
 void

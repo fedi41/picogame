@@ -24,9 +24,11 @@ main()
     //for (unsigned int i = 0; i < list.count; i++) {
     //    printf("Files : %s\n", list.paths[i]);
     //}
+    float timer = 0.0f;
 
     //init_inputs();
     while(should_run()) {
+        update_categories_menu();
         begin_drawing();
 
         draw_categories_menu();
@@ -34,7 +36,7 @@ main()
         //draw_string_centered_x("Test", 120, 20, 1, 0xF800);
         //draw_string_centered_xy("Picogame", 120, 120, 3, 0xFF00);
         //draw_char('A', 200, 200, 6, 0xf9f9);
-        end_drawing();
+        float deltaTime = end_drawing();
     }
 
     //free_dirlist(&list);
