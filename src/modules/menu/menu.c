@@ -66,9 +66,6 @@ void
 draw_categories_menu()
 {
     draw_menu_bg();
-<<<<<<< HEAD
-    draw_string_centered_xy(cat_names[cat_index], 120, 120, 3, 0xFF00);
-=======
     draw_string_centered_xy("Picogame", 120, 20, 3, 0xFF00);
 
     draw_rect(1, 90, 60, 60, 0xFF00);
@@ -79,5 +76,4 @@ draw_categories_menu()
 
     draw_rect(179, 90, 60, 60, 0xFF00);
     draw_string_centered_xy(categories_menu_state.categories[(categories_menu_state.index+1) % categories_menu_state.count], 210, 120, 1, 0xFF00);
->>>>>>> f13539a (fancy menu)
 }
