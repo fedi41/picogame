@@ -13,6 +13,21 @@ const static char* cat_names[CATEGORIES_NUMBER] = {
 };
 int cat_index = 0;
 
+const char *categories[] = {
+    "test1",
+    "test2",
+    "test3",
+    "test4",
+    "test5"
+};
+
+struct categories_menu_state_t categories_menu_state = {
+    .index = 0,
+    .count = 5,
+    .categories = categories
+};
+
+
 void
 update_categories_menu()
 {
@@ -51,5 +66,18 @@ void
 draw_categories_menu()
 {
     draw_menu_bg();
+<<<<<<< HEAD
     draw_string_centered_xy(cat_names[cat_index], 120, 120, 3, 0xFF00);
+=======
+    draw_string_centered_xy("Picogame", 120, 20, 3, 0xFF00);
+
+    draw_rect(1, 90, 60, 60, 0xFF00);
+    draw_string_centered_xy(categories_menu_state.categories[(categories_menu_state.index - 1 + categories_menu_state.count) % categories_menu_state.count], 30, 120, 1, 0xFF00);
+
+    draw_rect(65, 65, 110, 110, 0xFF00);
+    draw_string_centered_xy(categories_menu_state.categories[categories_menu_state.index], 120, 120, 2, 0xFF00);
+
+    draw_rect(179, 90, 60, 60, 0xFF00);
+    draw_string_centered_xy(categories_menu_state.categories[(categories_menu_state.index+1) % categories_menu_state.count], 210, 120, 1, 0xFF00);
+>>>>>>> f13539a (fancy menu)
 }
