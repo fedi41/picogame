@@ -12,3 +12,4 @@ extern struct categories_menu_state_t categories_menu_state;
 
 void draw_menu_bg();
 void draw_categories_menu();
+void update_categories_menu();
