@@ -88,11 +88,13 @@ fill_triangle(int x1, int y1, int x2, int y2, int x3, int y3, color_t color)
     puts(INFO "Fill a triangle");
 }
 
-void
+float
 end_drawing()
 {
     puts(INFO "End drawing");
     LCD_1IN3_Display(BlackImage);
+    // TODO: Return the delta time
+    return 0.0f;
 }
 
 void
