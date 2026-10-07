@@ -6,28 +6,56 @@
 #define MENU_BG_SIZE 10
 #define CATEGORIES_NUMBER 3
 
+typedef struct {
+    float x, y, size;
+} Slot;
+
+static const Slot SLOTS[3] = {
+    { 1.0f,   90.0f, 60.0f  },
+    { 65.0f,  65.0f, 110.0f },
+    { 179.0f, 90.0f, 60.0f  } 
+};
+
 const static char* cat_names[CATEGORIES_NUMBER] = {
     "FPS",
     "Adventure",
     "Platformer"
 };
-int cat_index = 0;
 
+categories_menu_state_t categories_menu_state = {
+    .index = 0,
+    .count = CATEGORIES_NUMBER,
+    .categories = cat_names,
+    .anim_progress = 1.0f,
+    .anim_direction = 0,
+    .anim_duration = 0.20f
+};
 
-void
-update_categories_menu()
+static inline float lerp(float a, float b, float t) {
+    return a + t * (b - a);
+}
+
+void update_categories_menu()
 {
-    if (is_btn_pressed(BTN_LEFT)) {
-        cat_index--;
+    if (categories_menu_state.anim_direction != 0) {
+        float dt = 1.0f / 60.0f; 
+        categories_menu_state.anim_progress += dt / categories_menu_state.anim_duration;
+
+        if (categories_menu_state.anim_progress >= 1.0f) {
+            categories_menu_state.anim_progress = 1.0f;
+            categories_menu_state.index = (categories_menu_state.index + categories_menu_state.anim_direction + categories_menu_state.count) % categories_menu_state.count;
+            categories_menu_state.anim_direction = 0;
+        }
+        return;
     }
-    if (is_btn_pressed(BTN_RIGHT)) {
-        cat_index++;
-    }
-    if (cat_index < 0) {
-        cat_index = CATEGORIES_NUMBER - 1;
-    }
-    if (cat_index >= CATEGORIES_NUMBER) {
-        cat_index = 0;
+
+    if (is_btn_down(BTN_LEFT)) {
+        categories_menu_state.anim_direction = -1;
+        categories_menu_state.anim_progress = 0.0f;
+    } 
+    else if (is_btn_down(BTN_RIGHT)) {
+        categories_menu_state.anim_direction = 1;
+        categories_menu_state.anim_progress = 0.0f;
     }
 }
 
@@ -48,18 +76,57 @@ draw_menu_bg()
     }
 }
 
-void
-draw_categories_menu()
+void draw_categories_menu()
 {
     draw_menu_bg();
     draw_string_centered_xy("Picogame", 120, 20, 3, 0xFF00);
 
-    draw_rect(1, 90, 60, 60, 0xFF00);
-    draw_string_centered_xy(cat_names[(cat_index - 1 + CATEGORIES_NUMBER) % CATEGORIES_NUMBER], 30, 120, 1, 0xFF00);
+    float t = categories_menu_state.anim_progress;
+    int dir = categories_menu_state.anim_direction;
+    int curr = categories_menu_state.index;
 
-    draw_rect(65, 65, 110, 110, 0xFF00);
-    draw_string_centered_xy(cat_names[cat_index], 120, 120, 2, 0xFF00);
+    int idx_left   = (curr - 1 + categories_menu_state.count) % categories_menu_state.count;
+    int idx_center = curr;
+    int idx_right  = (curr + 1) % categories_menu_state.count;
 
-    draw_rect(179, 90, 60, 60, 0xFF00);
-    draw_string_centered_xy(cat_names[(cat_index + 1) % CATEGORIES_NUMBER], 210, 120, 1, 0xFF00);
+    Slot pos_left, pos_center, pos_right;
+
+    if (dir == 0) {
+        pos_left   = SLOTS[0];
+        pos_center = SLOTS[1];
+        pos_right  = SLOTS[2];
+    } else if (dir == 1) {
+        pos_left.x    = lerp(SLOTS[0].x, -60.0f, t);
+        pos_left.y    = lerp(SLOTS[0].y, 90.0f, t);
+        pos_left.size = lerp(SLOTS[0].size, 60.0f, t);
+
+        pos_center.x    = lerp(SLOTS[1].x, SLOTS[0].x, t);
+        pos_center.y    = lerp(SLOTS[1].y, SLOTS[0].y, t);
+        pos_center.size = lerp(SLOTS[1].size, SLOTS[0].size, t);
+
+        pos_right.x    = lerp(SLOTS[2].x, SLOTS[1].x, t);
+        pos_right.y    = lerp(SLOTS[2].y, SLOTS[1].y, t);
+        pos_right.size = lerp(SLOTS[2].size, SLOTS[1].size, t);
+    } else {
+        pos_left.x    = lerp(SLOTS[0].x, SLOTS[1].x, t);
+        pos_left.y    = lerp(SLOTS[0].y, SLOTS[1].y, t);
+        pos_left.size = lerp(SLOTS[0].size, SLOTS[1].size, t);
+
+        pos_center.x    = lerp(SLOTS[1].x, SLOTS[2].x, t);
+        pos_center.y    = lerp(SLOTS[1].y, SLOTS[2].y, t);
+        pos_center.size = lerp(SLOTS[1].size, SLOTS[2].size, t);
+
+        pos_right.x    = lerp(SLOTS[2].x, 240.0f, t);
+        pos_right.y    = lerp(SLOTS[2].y, 90.0f, t);
+        pos_right.size = lerp(SLOTS[2].size, 60.0f, t);
+    }
+
+    draw_rect((int)pos_left.x, (int)pos_left.y, (int)pos_left.size, (int)pos_left.size, 0xFF00);
+    draw_string_centered_xy(categories_menu_state.categories[idx_left], (int)(pos_left.x + pos_left.size / 2.0f), (int)(pos_left.y + pos_left.size / 2.0f), 1, 0xFF00);
+
+    draw_rect((int)pos_right.x, (int)pos_right.y, (int)pos_right.size, (int)pos_right.size, 0xFF00);
+    draw_string_centered_xy(categories_menu_state.categories[idx_right], (int)(pos_right.x + pos_right.size / 2.0f), (int)(pos_right.y + pos_right.size / 2.0f), 1, 0xFF00);
+
+    draw_rect((int)pos_center.x, (int)pos_center.y, (int)pos_center.size, (int)pos_center.size, 0xFF00);
+    draw_string_centered_xy(categories_menu_state.categories[idx_center], (int)(pos_center.x + pos_center.size / 2.0f), (int)(pos_center.y + pos_center.size / 2.0f), (dir == 0) ? 2 : 1, 0xFF00);
 }
