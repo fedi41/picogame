@@ -1,0 +1,100 @@
+#include "menu.h"
+#include "../graphics/graphics.h"
+#include "../text/text.h"
+#include "../inputs/inputs.h"
+
+#define MENU_BG_SIZE 10
+#define CATEGORIES_NUMBER 3
+
+const static char* cat_names[CATEGORIES_NUMBER] = {
+    "FPS",
+    "Adventure",
+    "Platformer"
+};
+
+struct categories_menu_state_t categories_menu_state = {
+    .index = 0,
+    .current_offset = 0.0f,
+    .count = CATEGORIES_NUMBER,
+    .categories = cat_names
+};
+
+
+void
+update_categories_menu()
+{
+    if (is_btn_down(BTN_LEFT)) {
+        categories_menu_state.index--;
+        if (categories_menu_state.index < 0) {
+            categories_menu_state.index = categories_menu_state.count - 1; 
+            categories_menu_state.current_offset += categories_menu_state.count; 
+        }
+    }
+    if (is_btn_down(BTN_RIGHT)) {
+        categories_menu_state.index++;
+        if (categories_menu_state.index >= categories_menu_state.count) {
+            categories_menu_state.index = 0;
+            categories_menu_state.current_offset -= categories_menu_state.count;
+        }
+    }
+    float speed = 0.01f;
+    categories_menu_state.current_offset += (categories_menu_state.index - categories_menu_state.current_offset) * speed;
+}
+
+void
+draw_menu_bg()
+{
+    for (int x = 0; x < 240/MENU_BG_SIZE+MENU_BG_SIZE; x++)
+    {
+        for (int y = 0; y < 240/MENU_BG_SIZE+MENU_BG_SIZE; y++)
+        {
+            if ((x+y)%2==0)
+            {
+                fill_rect(x*MENU_BG_SIZE, y*MENU_BG_SIZE, MENU_BG_SIZE, MENU_BG_SIZE, 0x1000);
+            } else {
+                fill_rect(x*MENU_BG_SIZE, y*MENU_BG_SIZE, MENU_BG_SIZE, MENU_BG_SIZE, 0x0001);
+            }
+        }
+    }
+}
+
+void
+draw_categories_menu()
+{
+    draw_menu_bg();
+    draw_string_centered_xy("Picogame", 120, 20, 3, 0xFF00);
+
+    /*draw_rect(1, 90, 60, 60, 0xFF00);
+    draw_string_centered_xy(categories_menu_state.categories[(categories_menu_state.index - 1 + categories_menu_state.count) % categories_menu_state.count], 30, 120, 1, 0xFF00);
+
+    draw_rect(65, 65, 110, 110, 0xFF00);
+    draw_string_centered_xy(categories_menu_state.categories[categories_menu_state.index], 120, 120, 2, 0xFF00);
+
+    draw_rect(179, 90, 60, 60, 0xFF00);
+    draw_string_centered_xy(categories_menu_state.categories[(categories_menu_state.index+1) % categories_menu_state.count], 210, 120, 1, 0xFF00);*/
+    int center_x = 120;
+    int center_y = 120;
+    int item_spacing = 90;
+
+    for (int i = 0; i < categories_menu_state.count; i++) {
+        float rel_pos = (float)i - categories_menu_state.current_offset;
+
+        while (rel_pos < -categories_menu_state.count / 2.0f) rel_pos += categories_menu_state.count;
+        while (rel_pos >  categories_menu_state.count / 2.0f) rel_pos -= categories_menu_state.count;
+
+        float x = center_x + rel_pos * item_spacing;
+
+        float dist = fabs(rel_pos);
+        if (dist > 1.5f) continue;
+
+        float scale = 1.0f - (dist * 2.0f);
+        int size = (int)(110 * scale);
+
+        int box_x = (int)(x - size / 2.0f);
+        int box_y = (int)(center_y - size / 2.0f);
+        int text_scale = (dist < 0.3f) ? 2 : 1;
+
+        draw_rect(box_x, box_y, size, size, 0xFF00);
+        draw_string_centered_xy(categories_menu_state.categories[i], (int)x, center_y, text_scale, 0xFF00);
+    }
+}
