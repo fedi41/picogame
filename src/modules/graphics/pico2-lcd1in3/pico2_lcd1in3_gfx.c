@@ -60,6 +60,10 @@ draw_rect(int x, int y, int w, int h, color_t color)
 void
 fill_rect(int x, int y, int w, int h, color_t color)
 {
+    if (x < 0) x = 0;
+    if (y < 0) y = 0;
+    if (x + w > 240) w = w - ((x+w)-240);
+    if (y + h > 240) h = h - ((y+h)-240);
     Paint_DrawRectangle(x, y, x+w, y+h, color, DOT_PIXEL_1X1, DRAW_FILL_FULL);
     puts(INFO "Fill a rectangle");
 }

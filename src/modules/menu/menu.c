@@ -6,6 +6,8 @@
 #define MENU_BG_SIZE 10
 #define CATEGORIES_NUMBER 3
 
+int bg_offset_scaled = 0;
+
 typedef struct {
     float x, y, size;
 } Slot;
@@ -37,6 +39,11 @@ static inline float lerp(float a, float b, float t) {
 
 void update_categories_menu(float dt)
 {
+    bg_offset_scaled += dt*1000*20; 
+    //bg_offset_scaled = (bg_offset_scaled/1000.0f) % MENU_BG_SIZE; 
+
+    if (bg_offset_scaled >= MENU_BG_SIZE * 1000) bg_offset_scaled = 0;
+
     if (categories_menu_state.anim_direction != 0) {
         categories_menu_state.anim_progress += dt / categories_menu_state.anim_duration;
 
@@ -61,15 +68,18 @@ void update_categories_menu(float dt)
 void
 draw_menu_bg()
 {
-    for (int x = 0; x < 240/MENU_BG_SIZE+MENU_BG_SIZE; x++)
+
+    int bg_offset = bg_offset_scaled / 1000;
+
+    for (int x = -1; x < 240/MENU_BG_SIZE+MENU_BG_SIZE; x++)
     {
-        for (int y = 0; y < 240/MENU_BG_SIZE+MENU_BG_SIZE; y++)
+        for (int y = -1; y < 240/MENU_BG_SIZE+MENU_BG_SIZE; y++)
         {
             if ((x+y)%2==0)
             {
-                fill_rect(x*MENU_BG_SIZE, y*MENU_BG_SIZE, MENU_BG_SIZE, MENU_BG_SIZE, 0x1000);
+                fill_rect(x*MENU_BG_SIZE+bg_offset, y*MENU_BG_SIZE+bg_offset, MENU_BG_SIZE, MENU_BG_SIZE, 0x1000);
             } else {
-                fill_rect(x*MENU_BG_SIZE, y*MENU_BG_SIZE, MENU_BG_SIZE, MENU_BG_SIZE, 0x0001);
+                fill_rect(x*MENU_BG_SIZE+bg_offset, y*MENU_BG_SIZE+bg_offset, MENU_BG_SIZE, MENU_BG_SIZE, 0x0001);
             }
         }
     }
