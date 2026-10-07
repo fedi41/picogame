@@ -23,6 +23,14 @@ is_btn_pressed(int btn)
         return IsKeyPressed(KEY_A) || IsKeyPressed(KEY_LEFT);
     case BTN_RIGHT:
         return IsKeyPressed(KEY_D) || IsKeyPressed(KEY_RIGHT);
+    case BTN_A:
+        return IsKeyPressed(KEY_H);
+    case BTN_B:
+        return IsKeyPressed(KEY_J);
+    case BTN_X:
+        return IsKeyPressed(KEY_K);
+    case BTN_Y:
+        return IsKeyPressed(KEY_L);
     default:
         return 0;
     }
@@ -40,6 +48,14 @@ is_btn_down(int btn)
         return IsKeyDown(KEY_A) || IsKeyDown(KEY_LEFT);
     case BTN_RIGHT:
         return IsKeyDown(KEY_D) || IsKeyDown(KEY_RIGHT);
+    case BTN_A:
+        return IsKeyDown(KEY_H);
+    case BTN_B:
+        return IsKeyDown(KEY_J);
+    case BTN_X:
+        return IsKeyDown(KEY_K);
+    case BTN_Y:
+        return IsKeyDown(KEY_L);
     default:
         return 0;
     }
