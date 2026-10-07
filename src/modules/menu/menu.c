@@ -13,28 +13,14 @@ const static char* cat_names[CATEGORIES_NUMBER] = {
 };
 int cat_index = 0;
 
-const char *categories[] = {
-    "test1",
-    "test2",
-    "test3",
-    "test4",
-    "test5"
-};
-
-struct categories_menu_state_t categories_menu_state = {
-    .index = 0,
-    .count = 5,
-    .categories = categories
-};
-
 
 void
 update_categories_menu()
 {
-    if (is_btn_down(BTN_LEFT)) {
+    if (is_btn_pressed(BTN_LEFT)) {
         cat_index--;
     }
-    if (is_btn_down(BTN_RIGHT)) {
+    if (is_btn_pressed(BTN_RIGHT)) {
         cat_index++;
     }
     if (cat_index < 0) {
@@ -69,11 +55,11 @@ draw_categories_menu()
     draw_string_centered_xy("Picogame", 120, 20, 3, 0xFF00);
 
     draw_rect(1, 90, 60, 60, 0xFF00);
-    draw_string_centered_xy(categories_menu_state.categories[(categories_menu_state.index - 1 + categories_menu_state.count) % categories_menu_state.count], 30, 120, 1, 0xFF00);
+    draw_string_centered_xy(cat_names[(cat_index - 1 + CATEGORIES_NUMBER) % CATEGORIES_NUMBER], 30, 120, 1, 0xFF00);
 
     draw_rect(65, 65, 110, 110, 0xFF00);
-    draw_string_centered_xy(categories_menu_state.categories[categories_menu_state.index], 120, 120, 2, 0xFF00);
+    draw_string_centered_xy(cat_names[cat_index], 120, 120, 2, 0xFF00);
 
     draw_rect(179, 90, 60, 60, 0xFF00);
-    draw_string_centered_xy(categories_menu_state.categories[(categories_menu_state.index+1) % categories_menu_state.count], 210, 120, 1, 0xFF00);
+    draw_string_centered_xy(cat_names[(cat_index + 1) % CATEGORIES_NUMBER], 210, 120, 1, 0xFF00);
 }
