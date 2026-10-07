@@ -15,4 +15,4 @@ typedef struct {
 
 void draw_menu_bg();
 void draw_categories_menu();
-void update_categories_menu();
+void update_categories_menu(float dt);

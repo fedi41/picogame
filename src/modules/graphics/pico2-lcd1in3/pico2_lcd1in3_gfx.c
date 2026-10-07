@@ -3,11 +3,14 @@
 #include "pico/stdlib.h"
 #include "LCD_1in3.h"
 #include "GUI_Paint.h"
+#include "pico/time.h"
 
 #define INFO "INFO: "
 
 typedef uint16_t color_t;
 
+
+uint32_t msBegin;
 UDOUBLE Imagesize = LCD_1IN3_HEIGHT*LCD_1IN3_WIDTH*2;
 UWORD *BlackImage;
 
@@ -36,7 +39,8 @@ begin_drawing()
 {
     puts(INFO "Begin drawing");
     Paint_Clear(BLACK);
-    // no further work required here
+
+    msBegin = to_ms_since_boot(get_absolute_time());
 }
 
 void
@@ -93,8 +97,8 @@ end_drawing()
 {
     puts(INFO "End drawing");
     LCD_1IN3_Display(BlackImage);
-    // TODO: Return the delta time
-    return 0.0f;
+    
+    return ((to_ms_since_boot(get_absolute_time()) - msBegin)/1000.0f);
 }
 
 void

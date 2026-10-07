@@ -35,10 +35,9 @@ static inline float lerp(float a, float b, float t) {
     return a + t * (b - a);
 }
 
-void update_categories_menu()
+void update_categories_menu(float dt)
 {
     if (categories_menu_state.anim_direction != 0) {
-        float dt = 1.0f / 60.0f; 
         categories_menu_state.anim_progress += dt / categories_menu_state.anim_duration;
 
         if (categories_menu_state.anim_progress >= 1.0f) {
