@@ -7,6 +7,7 @@ SRC_DIRS = src \
            src/modules/files/raylib \
            src/modules/text/raylib \
            src/modules/text/fonts \
+		   src/modules/menu \
            src/lua \
            src/lua_modules
 

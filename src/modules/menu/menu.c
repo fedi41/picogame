@@ -127,5 +127,6 @@ void draw_categories_menu()
     draw_string_centered_xy(categories_menu_state.categories[idx_right], (int)(pos_right.x + pos_right.size / 2.0f), (int)(pos_right.y + pos_right.size / 2.0f), 1, 0xFF00);
 
     draw_rect((int)pos_center.x, (int)pos_center.y, (int)pos_center.size, (int)pos_center.size, 0xFF00);
-    draw_string_centered_xy(categories_menu_state.categories[idx_center], (int)(pos_center.x + pos_center.size / 2.0f), (int)(pos_center.y + pos_center.size / 2.0f), (dir == 0) ? 2 : 1, 0xFF00);
+    draw_string_centered_xy(categories_menu_state.categories[idx_center], (int)(pos_center.x + pos_center.size / 2.0f), (int)(pos_center.y + pos_center.size / 2.0f), 1, 0xFF00);
+    //draw_string_centered_xy(categories_menu_state.categories[idx_center], (int)(pos_center.x + pos_center.size / 2.0f), (int)(pos_center.y + pos_center.size / 2.0f), (dir == 0) ? 2 : 1, 0xFF00);
 }
