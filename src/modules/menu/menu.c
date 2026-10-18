@@ -1,12 +1,17 @@
 #include "menu.h"
+#include <ctype.h>
+#include <stdio.h>
 #include "../graphics/graphics.h"
 #include "../text/text.h"
 #include "../inputs/inputs.h"
+#include "../files/files.h"
 
 #define MENU_BG_SIZE 10
 #define CATEGORIES_NUMBER 3
+#define PREFIX "games/"
 
 int bg_offset_scaled = 0;
+dirlist_t list;
 
 typedef struct {
     float x, y, size;
@@ -37,13 +42,32 @@ static inline float lerp(float a, float b, float t) {
     return a + t * (b - a);
 }
 
-void update_categories_menu(float dt)
+void
+str_to_lower(char *dst, const char* src)
 {
-    bg_offset_scaled += dt*1000*20; 
-    //bg_offset_scaled = (bg_offset_scaled/1000.0f) % MENU_BG_SIZE; 
+    while (*src) {
+        *dst++ = tolower(*src++); 
+    }
+}
 
-    if (bg_offset_scaled >= MENU_BG_SIZE * 1000) bg_offset_scaled = 0;
+void update_categories_menu(float dt, int *state)
+{
+    if (is_btn_down(BTN_A)) {
+        const char *folder = categories_menu_state.categories[categories_menu_state.index];
 
+        char low_folder[32];
+        memset(low_folder, 0, 32);
+        str_to_lower(low_folder, folder);
+
+        char buf[32];
+        memset(buf, 0, 32);
+
+        snprintf(buf, 32, PREFIX "%s/", low_folder);
+        puts(buf);
+        list = lsdir(buf);
+        *state = 1;
+    }
+    update_menu_bg(dt);
     if (categories_menu_state.anim_direction != 0) {
         categories_menu_state.anim_progress += dt / categories_menu_state.anim_duration;
 
@@ -68,7 +92,6 @@ void update_categories_menu(float dt)
 void
 draw_menu_bg()
 {
-
     int bg_offset = bg_offset_scaled / 1000;
 
     for (int x = -1; x < 240/MENU_BG_SIZE+MENU_BG_SIZE; x++)
@@ -83,6 +106,15 @@ draw_menu_bg()
             }
         }
     }
+}
+
+void
+update_menu_bg(float dt)
+{
+    bg_offset_scaled += dt*1000*20; 
+    //bg_offset_scaled = (bg_offset_scaled/1000.0f) % MENU_BG_SIZE; 
+
+    if (bg_offset_scaled >= MENU_BG_SIZE * 1000) bg_offset_scaled = 0;
 }
 
 void draw_categories_menu()
@@ -139,4 +171,22 @@ void draw_categories_menu()
     draw_rect((int)pos_center.x, (int)pos_center.y, (int)pos_center.size, (int)pos_center.size, 0xFF00);
     draw_string_centered_xy(categories_menu_state.categories[idx_center], (int)(pos_center.x + pos_center.size / 2.0f), (int)(pos_center.y + pos_center.size / 2.0f), 1, 0xFF00);
     //draw_string_centered_xy(categories_menu_state.categories[idx_center], (int)(pos_center.x + pos_center.size / 2.0f), (int)(pos_center.y + pos_center.size / 2.0f), (dir == 0) ? 2 : 1, 0xFF00);
+}
+
+void
+update_games_menu(float dt, int *state)
+{
+    if (is_btn_down(BTN_B)) {
+        free_dirlist(&list);
+        *state = 0;
+        return;
+    }
+    update_menu_bg(dt);
+}
+
+void
+draw_games_menu()
+{
+    draw_menu_bg();
+    draw_string_centered_x(categories_menu_state.categories[categories_menu_state.index], 120, 10, 3, 0xff00);
 }
