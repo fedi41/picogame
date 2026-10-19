@@ -7,7 +7,7 @@
 
 typedef struct {
     int fd;
-    char buffer[255];
+    char buffer[256];
 } LuaStream;
 
 lua_State *lua_compile(const char *pathname);

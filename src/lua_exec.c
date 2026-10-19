@@ -43,6 +43,10 @@ lua_State
 *lua_compile(const char *pathname)
 {
     int fd = file_open(pathname);
+    if (fd < 0) {
+        puts("ERROR: couldn't open the file");
+        return NULL;
+    }
     LuaStream stream = {
         .fd = fd,
     };
@@ -69,6 +73,9 @@ lua_State
 int
 lua_init_engine(lua_State *L)
 {
+    if (!L) {
+        return 69;
+    }
     // First we need to execute the bytecode entirely
     if (lua_pcall(L, 0, 0, 0) != LUA_OK) {
         const char *err = lua_tostring(L, -1);
@@ -95,6 +102,9 @@ lua_init_engine(lua_State *L)
 int
 lua_update_engine(lua_State *L)
 {
+    if (!L) {
+        return 69;
+    }
     // Execute the update() function
     lua_getglobal(L, "update");
     if (lua_isfunction(L, -1)) {
@@ -114,6 +124,9 @@ lua_update_engine(lua_State *L)
 int
 lua_draw_engine(lua_State *L)
 {
+    if (!L) {
+        return 69;
+    }
     // Execute the draw() function
     lua_getglobal(L, "draw");
     if (lua_isfunction(L, -1)) {
