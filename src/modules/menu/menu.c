@@ -202,4 +202,9 @@ draw_games_menu()
     snprintf(buf, 16, "%d/%d", list_idx+1, list.count);
     draw_string_centered_x(buf, 220, 220, 1, 0xff00);
     draw_string_centered_x(categories_menu_state.categories[categories_menu_state.index], 120, 10, 3, 0xff00);
+
+    // The list
+    for (int i = 0; i < list.count; i++) {
+        draw_string_centered_x(list.paths[i], 120, 48 + 12 * i, 1, 0xff00);
+    }
 }
