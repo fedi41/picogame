@@ -35,6 +35,10 @@ main()
         
     float deltaTime = 0;
 
+    char game_path[32];
+    lua_State *engine_state;
+    bool engine_initialized = false;
+
     while(should_run()) {
         switch (current_state) {
         case CATEGORIES_MENU:
@@ -44,8 +48,18 @@ main()
             update_games_menu(deltaTime, &current_state);
             break;
         case GAME_RUN:
+            if (!engine_initialized) 
+            {
+                get_chosen_game_path(game_path);
+                puts(game_path);
+                engine_state = lua_compile(game_path);
+                lua_update_engine(engine_state);
+                engine_initialized = true;
+            }
+            lua_update_engine(engine_state);
             break;
         }
+
 
         begin_drawing();
 
@@ -57,6 +71,7 @@ main()
             draw_games_menu();
             break;
         case GAME_RUN:
+            lua_draw_engine(engine_state);
             break;
         }
 

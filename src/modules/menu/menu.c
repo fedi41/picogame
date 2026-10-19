@@ -185,6 +185,13 @@ update_games_menu(float dt, int *state)
         return;
     }
 
+    if (is_btn_down(BTN_A)) {
+        free_dirlist(&list);
+        *state = 2;
+        return;
+    }
+
+
     if (is_btn_pressed(BTN_DOWN)) {
         list_idx++;
         if (list_idx >= list.count) {
@@ -269,4 +276,8 @@ draw_games_menu()
 
         fill_rect(sb_x, thumb_y, sb_w, thumb_h, 0xff00);
     }
+} 
+
+void get_chosen_game_path(char* buf) {
+    snprintf(buf, 32, PREFIX "%s/%s", categories_menu_state.categories[categories_menu_state.index], list.paths[list_idx]);
 }
