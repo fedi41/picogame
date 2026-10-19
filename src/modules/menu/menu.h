@@ -13,6 +13,7 @@ typedef struct {
 //extern const char *categories[];
 //extern struct categories_menu_state_t categories_menu_state;
 
+void str_to_lower(char *dst, const char* src);
 void get_chosen_game_path(char* buf);
 void draw_menu_bg();
 void update_menu_bg(float dt);

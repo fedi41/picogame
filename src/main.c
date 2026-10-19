@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdbool.h>
 #include "hal/hal.h"
 #include "modules/graphics/graphics.h"
 #include "modules/inputs/inputs.h"
@@ -35,7 +36,7 @@ main()
         
     float deltaTime = 0;
 
-    char game_path[32];
+    char game_path[128];
     lua_State *engine_state;
     bool engine_initialized = false;
 
@@ -50,13 +51,21 @@ main()
         case GAME_RUN:
             if (!engine_initialized) 
             {
+                puts("Initialized");
                 get_chosen_game_path(game_path);
                 puts(game_path);
                 engine_state = lua_compile(game_path);
-                lua_update_engine(engine_state);
+                lua_init_engine(engine_state);
                 engine_initialized = true;
             }
-            lua_update_engine(engine_state);
+            if (lua_update_engine(engine_state)) {
+                return 69;
+            }
+            if (is_btn_down(BTN_A) && is_btn_down(BTN_B)) {
+                lua_close(engine_state);
+                engine_initialized = false;
+                current_state = 0;
+            }
             break;
         }
 
@@ -71,7 +80,9 @@ main()
             draw_games_menu();
             break;
         case GAME_RUN:
-            lua_draw_engine(engine_state);
+            if (engine_initialized) {
+                lua_draw_engine(engine_state);
+            }
             break;
         }
 

@@ -55,7 +55,7 @@ str_to_lower(char *dst, const char* src)
 
 void update_categories_menu(float dt, int *state)
 {
-    if (is_btn_down(BTN_A)) {
+    if (is_btn_pressed(BTN_A)) {
         const char *folder = categories_menu_state.categories[categories_menu_state.index];
 
         char low_folder[32];
@@ -63,9 +63,9 @@ void update_categories_menu(float dt, int *state)
         str_to_lower(low_folder, folder);
 
         char buf[32];
-        memset(buf, 0, 32);
+        memset(buf, 0, 31);
 
-        snprintf(buf, 32, PREFIX "%s/", low_folder);
+        snprintf(buf, 31, "%s%s/", PREFIX, low_folder);
         puts(buf);
         list = lsdir(buf);
         *state = 1;
@@ -181,13 +181,17 @@ update_games_menu(float dt, int *state)
 {
     if (is_btn_down(BTN_B)) {
         free_dirlist(&list);
+        list_idx = 0;
+        top_index = 0;
         *state = 0;
         return;
     }
 
-    if (is_btn_down(BTN_A)) {
-        free_dirlist(&list);
-        *state = 2;
+    if (is_btn_pressed(BTN_A)) {
+        //free_dirlist(&list);
+        if (list.count > 0 && list.paths != NULL) {
+            *state = 2;
+        }
         return;
     }
 
@@ -279,5 +283,8 @@ draw_games_menu()
 } 
 
 void get_chosen_game_path(char* buf) {
-    snprintf(buf, 32, PREFIX "%s/%s", categories_menu_state.categories[categories_menu_state.index], list.paths[list_idx]);
+    char low_cat[32];
+    memset(low_cat, 0, 32);
+    str_to_lower(low_cat, categories_menu_state.categories[categories_menu_state.index]);
+    snprintf(buf, 128, "%s%s/%s", PREFIX, low_cat, list.paths[list_idx]);
 }

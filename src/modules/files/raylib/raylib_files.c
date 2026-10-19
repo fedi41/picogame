@@ -23,13 +23,21 @@ init_files()
 int
 file_open(const char *pathname)
 {
-    FILE *fd = fopen(pathname, "rwb");
+    FILE *fd = fopen(pathname, "rb");
     if (fd == NULL) {
         printf(ERROR "Failed to open the file '%s'\n", pathname);
         return -1;
     }
-    fd_table[index_table] = fd;
-    return index_table++;
+    for (int i = 0; i < MAX_FILES; i++) {
+        if (fd_table[i] == NULL) {
+            fd_table[i] = fd;
+            return i;
+        }
+    }
+
+    printf(ERROR "Too many open files\n");
+    fclose(fd);
+    return -1;
 }
 
 size_t
