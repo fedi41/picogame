@@ -1,6 +1,6 @@
 function init() end
 
-function update() end
+function update(dt) end
 
 function draw()
     gfx.clear_screen(0x0000);

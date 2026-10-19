@@ -58,7 +58,7 @@ main()
                 lua_init_engine(engine_state);
                 engine_initialized = true;
             }
-            if (lua_update_engine(engine_state)) {
+            if (lua_update_engine(engine_state, deltaTime)) {
                 return 69;
             }
             if (is_btn_down(BTN_A) && is_btn_down(BTN_B)) {

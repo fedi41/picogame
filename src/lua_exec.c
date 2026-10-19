@@ -100,7 +100,7 @@ lua_init_engine(lua_State *L)
 }
 
 int
-lua_update_engine(lua_State *L)
+lua_update_engine(lua_State *L, float dt)
 {
     if (!L) {
         return 69;
@@ -108,7 +108,8 @@ lua_update_engine(lua_State *L)
     // Execute the update() function
     lua_getglobal(L, "update");
     if (lua_isfunction(L, -1)) {
-        int status = lua_pcall(L, 0, 0, 0);
+	lua_pushnumber(L, (lua_Number)dt);
+        int status = lua_pcall(L, 1, 0, 0);
         if (status != LUA_OK) {
             const char *err = lua_tostring(L, -1);
             printf(ERROR "Lua: %s\n", err);

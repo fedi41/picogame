@@ -7,7 +7,7 @@
 #include "../files/files.h"
 
 #define MENU_BG_SIZE 10
-#define CATEGORIES_NUMBER 3
+#define CATEGORIES_NUMBER 4
 #define PREFIX "games/"
 
 int bg_offset_scaled = 0;
@@ -29,7 +29,8 @@ static const Slot SLOTS[3] = {
 const static char* cat_names[CATEGORIES_NUMBER] = {
     "FPS",
     "Adventure",
-    "Platformer"
+    "Platformer",
+    "Classics"
 };
 
 categories_menu_state_t categories_menu_state = {

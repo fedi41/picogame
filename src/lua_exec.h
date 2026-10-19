@@ -12,7 +12,7 @@ typedef struct {
 
 lua_State *lua_compile(const char *pathname);
 int lua_init_engine(lua_State *L);
-int lua_update_engine(lua_State *L);
+int lua_update_engine(lua_State *L, float dt);
 int lua_draw_engine(lua_State *L);
 
 #endif 
