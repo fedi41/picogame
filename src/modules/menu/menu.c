@@ -12,6 +12,7 @@
 
 int bg_offset_scaled = 0;
 dirlist_t list;
+int list_idx = 0;
 
 typedef struct {
     float x, y, size;
@@ -181,6 +182,15 @@ update_games_menu(float dt, int *state)
         *state = 0;
         return;
     }
+    if (is_btn_pressed(BTN_DOWN)) {
+        list_idx = (list_idx + 1) % list.count;
+    }
+    if (is_btn_pressed(BTN_UP)) {
+        list_idx--;
+    }
+    if (list_idx < 0) {
+        list_idx = list.count - 1;
+    }
     update_menu_bg(dt);
 }
 
@@ -188,5 +198,8 @@ void
 draw_games_menu()
 {
     draw_menu_bg();
+    char buf[16];
+    snprintf(buf, 16, "%d/%d", list_idx+1, list.count);
+    draw_string_centered_x(buf, 220, 220, 1, 0xff00);
     draw_string_centered_x(categories_menu_state.categories[categories_menu_state.index], 120, 10, 3, 0xff00);
 }
