@@ -13,6 +13,8 @@
 int bg_offset_scaled = 0;
 dirlist_t list;
 int list_idx = 0;
+static int top_index = 0;
+const int max_visible = 5;
 
 typedef struct {
     float x, y, size;
@@ -182,15 +184,29 @@ update_games_menu(float dt, int *state)
         *state = 0;
         return;
     }
+
     if (is_btn_pressed(BTN_DOWN)) {
-        list_idx = (list_idx + 1) % list.count;
+        list_idx++;
+        if (list_idx >= list.count) {
+            list_idx = 0;
+            top_index = 0;
+        } else if (list_idx >= top_index + max_visible) {
+            top_index = list_idx - max_visible + 1;
+        }
     }
     if (is_btn_pressed(BTN_UP)) {
         list_idx--;
+        if (list_idx < 0) {
+            list_idx = list.count - 1;
+            top_index = list.count - max_visible;
+            if (top_index < 0) {
+                top_index = 0;
+            }
+        } else if (list_idx < top_index) {
+            top_index = list_idx;
+        }
     }
-    if (list_idx < 0) {
-        list_idx = list.count - 1;
-    }
+
     update_menu_bg(dt);
 }
 
@@ -203,8 +219,54 @@ draw_games_menu()
     draw_string_centered_x(buf, 220, 220, 1, 0xff00);
     draw_string_centered_x(categories_menu_state.categories[categories_menu_state.index], 120, 10, 3, 0xff00);
 
+    int rect_h = 26;
+    int gap = 8;
+    int start_y = 40;
+    int start_x = 20;
+    int rect_w = 200;
+
     // The list
-    for (int i = 0; i < list.count; i++) {
-        draw_string_centered_x(list.paths[i], 120, 48 + 12 * i, 1, 0xff00);
+    for (int i = 0; i < max_visible; i++) {
+        int item_idx = top_index + i;
+        if (item_idx >= list.count) {
+            break;
+        }
+
+        int y = start_y + i * (rect_h + gap);
+        color_t txt_color = 0xff00;
+        color_t bg_color = 0xC618;
+
+        if (item_idx == list_idx) {
+            txt_color = 0x0909;
+            bg_color = 0x1082;
+        }
+
+        int bg_y = 44 + 14 * i;
+        fill_rect(start_x, y, rect_w, rect_h, bg_color);
+        draw_string_centered_x(list.paths[item_idx], 120, y+5, 2, txt_color);
+
+        if (item_idx == list_idx) {
+            draw_rect(start_x, y, rect_w, rect_h, txt_color);
+        }
+    }
+    // Scrollbar
+    if (list.count > max_visible) {
+        int sb_x = start_x + rect_w + 6;
+        int sb_y = start_y;
+        int sb_w = 4;
+        int sb_h = (max_visible * (rect_h + gap)) - gap;
+
+        fill_rect(sb_x, sb_y, sb_w, sb_h, 0x1082);
+
+        int thumb_h = (sb_h * max_visible) / list.count;
+        if (thumb_h < 6) thumb_h = 6;
+
+        int max_top = list.count - max_visible;
+        int thumb_y = sb_y;
+        if (max_top > 0) {
+            thumb_y = sb_y + ((sb_h - thumb_h) * top_index) / max_top;
+        }
+
+        fill_rect(sb_x, thumb_y, sb_w, thumb_h, 0xff00);
     }
 }
