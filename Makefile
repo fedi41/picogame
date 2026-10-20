@@ -4,7 +4,7 @@ SRC_DIRS = src \
            src/hal/raylib \
            src/modules/graphics/raylib \
            src/modules/inputs/raylib \
-           src/modules/files/raylib \
+           src/modules/files/web \
            src/modules/text/raylib \
            src/modules/text/fonts \
 		   src/modules/menu \
@@ -26,7 +26,9 @@ LDFLAGS = $(RAYLIB_LIB) \
           -s WASM=1 \
           -s ALLOW_MEMORY_GROWTH=1 \
           -s FORCE_FILESYSTEM=1 \
-          -s ASYNCIFY
+          -s ASYNCIFY \
+		  -s ASYNCIFY_IMPORTS='["fetch_json_string_wasm"]' \
+	      -s EXPORTED_RUNTIME_METHODS='["ccall", "cwrap", "stringToUTF8", "lengthBytesUTF8"]'
 
 OUT_DIR = build_web
 TARGET = $(OUT_DIR)/index.html
