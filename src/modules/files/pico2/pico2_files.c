@@ -40,28 +40,44 @@ init_files()
 int
 file_open(const char *pathname)
 {
-    int err = pico_open(pathname, LFS_O_RDWR);
-    if (err > -1) return err; // no error (yay)
+    int fd = pico_open(pathname, LFS_O_RDWR);
+    if (fd > -1) return fd; // return file id
     printf(ERROR "failed to open file '%s'\n", pathname);
+    printf(ERROR " - '%s'", pico_errmsg(fd));
     return -1;
 }
 
 size_t
 file_read(void *ptr, size_t size, size_t nb_elements, int fd) 
 {
+    if (size == 0 || nb_elements == 0)
+        return 0;
 
-    return 0;
+    return pico_read(fd, ptr, size * nb_elements) / size;
 }
 
 size_t
 file_write(void *ptr, size_t size, size_t nb_elements, int fd)
 {
-    return 0;
+    if (size == 0 || nb_elements == 0)
+        return 0;
+    
+    return pico_write(fd, ptr, size * nb_elements) / size;
 }
 void
 file_close(int fd)
 {
-    return;
+    return pico_close(fd);
+}
+
+dirlist_t
+lsdir(const char *path) {
+
+}
+
+void
+free_dirlist(dirlist_t *list) {
+
 }
 
 int
